@@ -1,6 +1,13 @@
 # Fluffin Static Website Generator
 
-Fluffin is a lightweight static website generator designed to help you quickly build and deploy static websites. With Fluffin, you can easily create and manage your website content, customize your design, and publish your site to the web.
+Fluffin is a lightweight static website generator. I tried hugo, jekyll, pelican and other things like this
+but I always found them too complex for my needs. I wanted something simple and opinionated that let me build 
+static stuff out of the box.
+
+## Requirements:
+
+ * Basic static website knowleges html / css / js
+ * Templating language : [Jinja2](https://jinja.palletsprojects.com/en/3.0.x/)
 
 ## Features:
 
@@ -15,7 +22,7 @@ Fluffin is a lightweight static website generator designed to help you quickly b
 To install Fluffin, simply run the following command:
 
 ```python
-pip install fluffin
+python -m pip install --user fluffin
 ```
 
 ## Usage
@@ -49,3 +56,10 @@ When you run Fluffin in your current folder, it will create a folder structure o
 running fluffin command build just build `templates` content to dist folder acordingly.
 
 I hope you find Fluffin helpful for building your static websites!
+
+
+## Examples
+
+ > see [example](./example) folder for a simple project sample
+
+From there you can run `fluffin --dev` and go on http://localhost:8110 to see live example website.

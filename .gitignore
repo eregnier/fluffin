@@ -1,9 +1,10 @@
 .idea
 dist
 build
-templates/
+/templates
 main.bin
 main.build/
 main.dist/
 main.onefile-build/
 fluffin.egg-info/
+__pycache__

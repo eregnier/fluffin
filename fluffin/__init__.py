@@ -6,6 +6,7 @@ import shutil
 import socketserver
 import threading
 import time
+import traceback
 
 from jinja2 import Environment, FileSystemLoader
 from watchdog.events import LoggingEventHandler
@@ -82,6 +83,19 @@ def render_template(template_name):
 
 @debounce(0.3)
 def render_templates():
+    rendered = False
+    while not rendered:
+        try:
+            try_render_templates()
+            rendered = True
+        except Exception as e:
+            print(traceback.format_exc())
+            print("\n > Error rendering templates, retrying in 5 seconds")
+            rendered = False
+            time.sleep(5)
+
+
+def try_render_templates():
     print("\n => Generating <=\n")
     if os.path.isdir(DIST_DIR):
         shutil.rmtree(DIST_DIR)
@@ -97,15 +111,16 @@ def render_templates():
 
 
 class FileWatcherHandler(threading.Thread):
-    def __init__(self):
+    def __init__(self, web_server_thread):
         super().__init__()
         self.ready = True
+        self.web_server_thread = web_server_thread
 
     def stop_watch(self):
         self.ready = False
 
     def run(self):
-        event_handler = Event()
+        event_handler = Event(web_server_thread=self.web_server_thread)
         observer = Observer()
 
         print("\n + Watching for changes...", TEMPLATE_DIR)
@@ -118,10 +133,15 @@ class FileWatcherHandler(threading.Thread):
 
 
 class Event(LoggingEventHandler):
+    def __init__(self, *args, **kwargs):
+        self.web_server_thread = kwargs.pop("web_server_thread")
+        super().__init__(*args, **kwargs)
+
     def on_modified(self, event):
-        web_server_thread.stop_server()
+        self.web_server_thread.stop_server()
+        rendered = False
         render_templates()
-        web_server_thread.start_server()
+        self.web_server_thread.start_server()
 
 
 class WebServerHandler(threading.Thread):
@@ -177,7 +197,7 @@ def run():
 
     if "--dev" in os.sys.argv:
         web_server_thread = WebServerHandler()
-        watch_thread = FileWatcherHandler()
+        watch_thread = FileWatcherHandler(web_server_thread=web_server_thread)
         try:
             web_server_thread.start()
             watch_thread.start()
@@ -191,7 +211,9 @@ def run():
             watch_thread.join()
             time.sleep(0.5)
             print(" ✖ Stopped dev server. Bye!")
-
+    else:
+        with open(f"{DIST_DIR}/static/hot-reload.js", "w") as f:
+            f.write("//no hot reload in production")
 
 if __name__ == "__main__":
     run()
