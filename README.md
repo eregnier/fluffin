@@ -13,7 +13,7 @@ static stuff out of the box.
 
 - opinionated design to be as simple as possible to jump in an operate
 - should scale enough for small to medium static projects
-- langage agnosic : You can generate HTML | XML | JSON ... whatever file you want in the end.
+- language agnostic : You can generate HTML | XML | JSON ... whatever file you want in the end.
 - simple but effective hot reload for html websites system
 - minimal dependencies (python) that should let build final version from simple commands (cloud flare pages, netlify ...)
 
@@ -37,7 +37,7 @@ Runs the development server, which allows you to preview your site locally befor
 
 ## Folder Structure & development process
 
-Fluffin is designed to be KISS by having very few opiniated concepts described below:
+Fluffin is designed to be KISS by having very few opinionated concepts described below:
 
 run `fluffin --dev` to start build static content with a simple hot reload feature allowing convinient development process.
 

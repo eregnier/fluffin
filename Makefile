@@ -14,3 +14,12 @@ build:
 build-dist:
 	@./venv/bin/python -m pip install nuitka
 	@./venv/bin/python -m nuitka --standalone  --follow-imports --onefile main.py
+
+publish:
+	./venv/bin/pip install twine
+	rm -rf build dist q.egg-info
+	find -name *.pyc -delete
+	./venv/bin/python setup.py sdist
+	./venv/bin/python python setup.py bdist_wheel
+	./venv/bin/twine upload dist/*
+
