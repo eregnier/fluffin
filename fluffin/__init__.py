@@ -1,6 +1,7 @@
 import http.server
 import json
 import os
+import sys
 import shutil
 import socketserver
 import threading
@@ -23,7 +24,9 @@ template_paths = [
 ]
 jinja_paths = FileSystemLoader(template_paths)
 
-env = Environment(loader=jinja_paths, autoescape=True, trim_blocks=True, lstrip_blocks=True)
+env = Environment(
+    loader=jinja_paths, autoescape=True, trim_blocks=True, lstrip_blocks=True
+)
 
 hot_reload_js = """
 window.addEventListener('load', () => {
@@ -155,7 +158,19 @@ class WebServerHandler(threading.Thread):
         self.ready = True
 
 
-if __name__ == "__main__":
+help_string = """
+fluffin help:
+
+    fluffin --dev : start dev server
+    fluffin : build only
+"""
+
+
+def run():
+
+    if "--help" in os.sys.argv:
+        print(help_string)
+        sys.exit(0)
 
     init()
     render_templates()
@@ -169,10 +184,14 @@ if __name__ == "__main__":
             while True:
                 time.sleep(0.2)
         except KeyboardInterrupt:
-            print(' > stopping server...')
+            print(" > stopping server...")
             web_server_thread.close()
             watch_thread.stop_watch()
             web_server_thread.join()
             watch_thread.join()
             time.sleep(0.5)
             print(" ✖ Stopped dev server. Bye!")
+
+
+if __name__ == "__main__":
+    run()

@@ -13,4 +13,4 @@ build:
 
 build-dist:
 	@./venv/bin/python -m pip install nuitka
-	@python -m nuitka --standalone  --follow-imports --onefile main.py
+	@./venv/bin/python -m nuitka --standalone  --follow-imports --onefile main.py

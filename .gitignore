@@ -2,3 +2,8 @@
 dist
 build
 templates/
+main.bin
+main.build/
+main.dist/
+main.onefile-build/
+fluffin.egg-info/
