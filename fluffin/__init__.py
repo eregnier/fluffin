@@ -50,7 +50,7 @@ def init():
             os.makedirs(folder)
     hot_reload_path = f"{TEMPLATE_DIR}/static/hot-reload.js"
     if not os.path.isfile(hot_reload_path):
-        with open(hot_reload_path, "w") as f:
+        with open(hot_reload_path, "w", encoding="utf-8") as f:
             f.write(hot_reload_js)
 
 
@@ -76,7 +76,7 @@ def render_template(template_name):
     template = env.get_template(template_name)
     output = template.render()
     dist_file = os.path.join(DIST_DIR, template_name)
-    with open(dist_file, "w") as f:
+    with open(dist_file, "w", encoding="utf-8") as f:
         f.write(output)
     print(f"Rendered {template_name}")
 
@@ -106,7 +106,7 @@ def try_render_templates():
     for filename in os.listdir(PAGES_DIR):
         if filename.endswith(".html"):
             render_template(filename)
-    with open(f"{DIST_DIR}/last-update-date.json", "w") as f:
+    with open(f"{DIST_DIR}/last-update-date.json", "w", encoding="utf-8") as f:
         f.write(json.dumps({"timestamp": int(time.time() * 1000)}))
 
 
@@ -212,7 +212,7 @@ def run():
             time.sleep(0.5)
             print(" ✖ Stopped dev server. Bye!")
     else:
-        with open(f"{DIST_DIR}/static/hot-reload.js", "w") as f:
+        with open(f"{DIST_DIR}/static/hot-reload.js", "w", encoding="utf-8") as f:
             f.write("//no hot reload in production")
 
 if __name__ == "__main__":
